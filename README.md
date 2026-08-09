@@ -12,40 +12,41 @@ You only have to follow the steps in the link below to the end of step 2 under t
 <https://developer.atlassian.com/platform/forge/getting-started/>
 
 ### 2. Run `forge register` to create a Forge app ID that uniquely identifies the version of ConfluenceGuessr on your development site.
-You will be asked to "...select the Developer Space you want to assign your app to". Create a new developer space and name it whatever you want e.g. Test.
-Then you will be asked to "Enter a name for the app". Name it whatever you want e.g. ConfluenceGuessr.
+You will be asked to `"...select the Developer Space you want to assign your app to".` Create a new developer space and name it whatever you want e.g. Test.
+Then you will be asked to `"Enter a name for the app".` Name it whatever you want e.g. ConfluenceGuessr.
 Agree to the Atlassian Developer Terms and the Privacy Policy by typing y and pressing enter.
 
 **Nb:**
-The manifest.yml file we hand over has our app ID removed. Before deploying, by first running:
+The manifest.yml file we hand over has our app ID removed. Before deploying, by first running:  
 
 `forge register`
 
-we create a new app under your Atlassian account with the new ID in manifest.yml that originally had an empty value for the app ID. You can do this only do this once. 
+we create a new app under your Atlassian account with the new ID in manifest.yml that originally had an empty value for the app ID. You can do this only do this once.  
 
 ### 3. Setting up the API keys
 
-**To get the API keys you have to do this:**
-Groq API key - Create an account with Groq Cloud Console. Pressed Create API Key and copied the key in a safe place e.g. a password manager
-Gemini API key - Sign up to Google AI Studio and create an API key. Used the Gemini API key instead of the default Gemini API Key. Copied the key into a safe place again.
+**To get the API keys you have to do this:**   
+**Groq API key** - Create an account with Groq Cloud Console. Pressed Create API Key and copied the key in a safe place e.g. a password manager.  
+**Gemini API key** - Sign up to Google AI Studio and create an API key. Used the Gemini API key instead of the default Gemini API Key. Copied the key into a safe place again.  
 
-The two AI provider API keys are stored as encrypted Forge environment variables and not in our source code. Set them once per environment by running the commands below.
-You will be prompted to paste the values for both. Repeat for each environment you deploy to as these variables are not shared between environments.
-**Then run these commands:**
-`forge variables set --encrypt GROQ_API_KEY --environment {environment_name e.g. development}`
+The two AI provider API keys are stored as encrypted Forge environment variables and not in our source code. Set them once per environment by running the commands below.  
+You will be prompted to paste the values for both. Repeat for each environment you deploy to as these variables are not shared between environments.  
+
+**Then run these commands:**  
+1. `forge variables set --encrypt GROQ_API_KEY --environment {environment_name e.g. development}`
 (you will then be prompted to enter the actual value for the key i.e. Enter the variable value: [hidden])
 
-`forge deploy` (Tip: Changes to environment variables will not apply to existing deployments. Please run forge deploy for your changes to take effect.)
-`forge install --upgrade` (may have to run if prompted)
+2. `forge deploy` (Tip: Changes to environment variables will not apply to existing deployments. Please run forge deploy for your changes to take effect.)
+3. `forge install --upgrade` (may have to run if prompted)
 
-`forge variables set --encrypt GEMINI_API_KEY --environment {environment_name e.g. development}`
+4. `forge variables set --encrypt GEMINI_API_KEY --environment {environment_name e.g. development}`
 (you will then be prompted to enter the actual value for the key i.e. Enter the variable value: [hidden])
 
-`forge deploy` (Tip: Changes to environment variables will not apply to existing deployments. Please run forge deploy for your changes to take effect.)
-`forge install --upgrade` (may have to run if prompted)
+5. `forge deploy` (Tip: Changes to environment variables will not apply to existing deployments. Please run forge deploy for your changes to take effect.)
+6. `forge install --upgrade` (may have to run if prompted)
 
 Nb:
-`forge variables list` will list all the environment variables that have been set. You should see both API keys.
+`forge variables list` will list all the environment variables that have been set. You should see both API keys.  
 `forge variables unset {API_KEY} -e {environment_name}` will remove a specfic environment variable (API KEY in this case) from {environment_name}. Hopefully this won't have to be used in just getting the app to run.
 
 ## 2. Deploying the app to your Confluence Dev site
