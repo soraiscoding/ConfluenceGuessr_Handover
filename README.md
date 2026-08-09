@@ -3,15 +3,16 @@
 ConfluenceGuessr is a Forge app for Confluence that delivers a knowledge-discovery, interactive guessing game.
 
 # How to get the app running
+Sections 1 and 2 will be entirely done in a terminal. So, please git clone this repo in the terminal of an IDE and run the commands below in the terminal of that IDE.
 
 ## 1. Setup (before deploying the app to your Confluence Dev site)
 
-### 1. If you've never run forge commands then you should set up your machine for forge app development; you will have to install/deploy this app on your own confluence developer site (that you create yourself) as only the source code is handed over.
+### 1.1 If you've never run forge commands then you should set up your machine for forge app development; you will have to install/deploy this app on your own confluence developer site (that you create yourself) as only the source code is handed over.
 
 You only have to follow the steps in the link below to the end of step 2 under the heading **Build your first Forge app**.
 <https://developer.atlassian.com/platform/forge/getting-started/>
 
-### 2. Run `forge register` to create a Forge app ID that uniquely identifies the version of ConfluenceGuessr on your development site.
+### 1.2 Run `forge register` to create a Forge app ID that uniquely identifies the version of ConfluenceGuessr on your development site.
 You will be asked to `"...select the Developer Space you want to assign your app to".` Create a new developer space and name it whatever you want e.g. Test.
 Then you will be asked to `"Enter a name for the app".` Name it whatever you want e.g. ConfluenceGuessr.
 Agree to the Atlassian Developer Terms and the Privacy Policy by typing y and pressing enter.
@@ -22,8 +23,27 @@ The manifest.yml file we hand over has our app ID removed. Before deploying, by 
 `forge register`
 
 we create a new app under your Atlassian account with the new ID in manifest.yml that originally had an empty value for the app ID. You can only do this once.  
+Check in the manifest.yml file that the app id isn't empty anymore.  
+before
+```
+app:
+  runtime:
+    name: nodejs24.x
+    memoryMB: 512
+    architecture: arm64
+  id:
+```
+after  
+```
+app:
+  runtime:
+    name: nodejs24.x
+    memoryMB: 512
+    architecture: arm64
+  id: {your_app_ID}
+```
 
-### 3. Setting up the API keys
+### 1.3 Setting up the API keys
 
 **To get the API keys you have to do this:**   
 **Groq API key** - Create an account with Groq Cloud Console. Pressed Create API Key and copied the key in a safe place e.g. a password manager.  
