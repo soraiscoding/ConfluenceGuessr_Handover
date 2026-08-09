@@ -21,7 +21,7 @@ The manifest.yml file we hand over has our app ID removed. Before deploying, by 
 
 `forge register`
 
-we create a new app under your Atlassian account with the new ID in manifest.yml that originally had an empty value for the app ID. You can do this only do this once.  
+we create a new app under your Atlassian account with the new ID in manifest.yml that originally had an empty value for the app ID. You can only do this once.  
 
 ### 3. Setting up the API keys
 
