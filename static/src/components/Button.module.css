@@ -1,0 +1,26 @@
+@import "../styles/master.css";
+
+.default_primary {
+    background-color: var(--colour-base-button);
+    color: #ffffff;
+    border-radius: 0.5rem;
+    border: none;
+    margin-bottom: 1rem;
+
+    transition: background-color 0.2s ease, transform 0.1s ease;
+
+    width: 16rem;
+    height: 2.5rem;
+
+    padding: 0.5em 1.5em;
+
+    font-size: var(--font-size-base);
+}
+
+.default_primary:hover {
+    background-color: var(--colour-base-button-hover);
+    color: #ffffff;
+    cursor: pointer;
+    transform: scale(1.02);
+}
+

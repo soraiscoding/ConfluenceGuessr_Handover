@@ -1,0 +1,83 @@
+@import "../styles/master.css";
+
+
+.centre_everything {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    width: 100%;
+    height: 100%;
+
+    /*background: linear-gradient(to bottom, var(--colour-bg-gradient), #ffffff);*/
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    max-width: 40rem;
+    width: 100%;
+
+    border-radius: 3rem;
+
+    padding: 2.5rem;
+
+    margin-bottom: 1rem;
+}
+
+.title {
+    color: var(--colour-text-title);
+    font-size: var(--font-size-title);
+    font-weight: var(--font-weight-medium);
+
+    margin-bottom: 1rem;
+}
+
+.about {
+    color: black;
+    font-size: var(--font-size-paragraph);
+
+    margin-bottom: 0.5rem;
+}
+
+.config {
+    color: var(--colour-text-secondary);
+    font-size: var(--font-size-heading);
+    font-weight: var(--font-weight-regular);
+}
+
+.config_cont {
+    color: black;
+    font-size: var(--font-size-base);
+    margin-bottom: 0.5rem;
+}
+
+.points {
+    color: var(--colour-correct-answer);
+    font-size: var(--font-size-heading);
+    font-weight: var(--font-weight-regular);
+}
+
+.points_cont {
+    color: black;
+    font-size: var(--font-size-base);
+    margin-bottom: 0.5rem;
+}
+
+.gamemodes {
+    color: var(--colour-incorrect-answer);
+    font-size: var(--font-size-heading);
+    font-weight: var(--font-weight-regular);
+}
+
+.gamemodes_cont {
+    color: black;
+    font-size: var(--font-size-base);
+    margin-bottom: 0.5rem;
+}
+
+.button {
+    margin-top: 1rem;
+}

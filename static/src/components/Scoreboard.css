@@ -1,0 +1,42 @@
+.score_container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    /*font-size: 35px;*/
+    font-size: var(--font-size-heading);
+    margin-bottom: 1.5rem;
+
+    overflow-y: auto;
+
+    /*width: 55rem;*/
+    max-height: 40rem;
+    height: 40rem;
+    width: 80%;
+}
+
+.score_row, .my_row {
+    display: flex;
+    border-radius: 0.6rem;
+    padding: 1rem;
+}
+
+.score_row {
+    background-color: var(--colour-grey-neutral);
+}
+
+.my_row {
+    background-color: #C6D5FF;
+}
+
+.result_rank {
+    width: 2.5rem;
+}
+
+.result_name {
+    flex: 1;
+}
+
+.result_score {
+    width: 12rem;
+    text-align: right;
+}

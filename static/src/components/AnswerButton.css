@@ -1,0 +1,32 @@
+@import "../styles/master.css";
+
+.answer-button {
+  width: 100%;
+
+  background-color: var(--colour-base-button);
+  color: #ffffff;
+  border: none;
+  border-radius: 0.75rem;
+
+  padding: 1.5em 16px;
+  font-size: var(--font-size-paragraph);
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.answer-button:hover:not(:disabled) {
+  background-color: var(--colour-base-button-hover);
+  transform: scale(1.02);
+}
+
+.answer-button:disabled {
+  cursor: default;
+}
+
+.answer-button.answer-button--correct {
+  background-color: var(--colour-correct-answer);
+}
+
+.answer-button.answer-button--incorrect {
+  background-color: var(--colour-incorrect-answer);
+}

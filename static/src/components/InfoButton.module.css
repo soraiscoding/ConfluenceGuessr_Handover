@@ -1,0 +1,17 @@
+@import "../styles/master.css";
+
+.info_button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    height: 2.5rem;
+    width: 2.5rem;
+
+    border-radius: 50%;
+    background-color: var(--colour-grey-dark);
+
+    color: black;
+
+    cursor: pointer;
+}

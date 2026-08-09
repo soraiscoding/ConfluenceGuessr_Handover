@@ -1,0 +1,17 @@
+@import "../styles/master.css";
+
+.creating_text { font-size: var(--font-size-lg); margin-bottom: 1.5rem; }
+
+.quiz_created_text { font-size: var(--font-size-lg); margin-bottom: 0.5rem; }
+
+.quiz_created_id { font-size: var(--font-size-lg); font-weight: bold; margin-bottom: 0.5rem; }
+
+.quiz_created_note { margin-bottom: 1.5rem; }
+
+.spinner {
+  width: 3rem; height: 3rem;
+  border: 5px solid #e6d5ff; border-top-color: var(--colour-base-button);
+  border-radius: 50%; animation: spin 0.9s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }

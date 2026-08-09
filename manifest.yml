@@ -1,0 +1,44 @@
+modules:
+  # globalPage not a macro or anything else
+  confluence:globalPage:
+    - key: confluenceguessr-global-page
+      resource: main
+      resolver:
+        function: resolver
+      title: confluenceguessr # the name users will see
+      route: global-page
+  function:
+    - key: resolver
+      handler: index.handler
+resources:
+  - key: main
+    path: static/build
+  # so forge knows to use the images e.g. logo
+  - key: images
+    path: static/src/images
+app:
+  runtime:
+    name: nodejs24.x
+    memoryMB: 512
+    architecture: arm64
+  id:
+
+permissions:
+  external:
+    fetch:
+      backend:
+        - address: 'api.groq.com'
+          inScopeEUD: true
+        - address: 'generativelanguage.googleapis.com'
+          inScopeEUD: true
+  content:
+    styles:
+      - 'unsafe-inline' # so we can align the logo using inline css
+  scopes:
+    - read:confluence-space.summary
+    - read:confluence-content.summary
+    - read:page:confluence
+    - read:space:confluence
+    - storage:app
+    - read:attachment:confluence
+    - read:confluence-user

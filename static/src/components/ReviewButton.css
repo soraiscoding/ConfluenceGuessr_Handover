@@ -1,0 +1,22 @@
+.default_review_button {
+	padding: 0 0.6em;
+
+	width: auto;
+  	height: 2rem;
+	background-color: var(--colour-secondary-button);
+
+	border: none;
+	border-radius: 0.5rem;
+
+	color: #ffffff;
+	font-size: var(--font-size-base);
+
+  	cursor: pointer;
+  	transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.default_review_button:hover {
+	background-color: var(--colour-secondary-button-hover);
+  	transform: scale(1.02);
+}
+

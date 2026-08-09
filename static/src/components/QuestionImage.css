@@ -1,0 +1,29 @@
+.question-image {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 0 1.25rem 0;
+}
+
+.question-image img {
+  max-width: 100%;
+  max-height: 20rem;
+  border-radius: 0.75rem;
+  object-fit: contain;
+}
+
+.question-image__hidden {
+  display: none;
+}
+
+.question-image__placeholder {
+  font-size: var(--font-size-heading);
+  color: var(--colour-grey-dark);
+}
+
+.question-image--error {
+  min-height: 4rem;
+  font-size: var(--font-size-paragraph);
+  font-style: italic;
+  color: var(--colour-grey-dark);
+}

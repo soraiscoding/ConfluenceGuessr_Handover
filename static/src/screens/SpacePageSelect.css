@@ -1,0 +1,138 @@
+.sps-container {
+  max-width: 40rem;
+  margin: 2.25rem auto;
+  padding: 0 1.5rem;
+  /*font-family: sans-serif;*/
+
+  height: calc(100vh - 4.5rem);
+
+  /*background: linear-gradient(to bottom, var(--colour-bg-gradient), #ffffff);*/
+}
+
+.sps-header {
+  margin-bottom: 1.5rem;
+}
+
+.sps-title {
+  font-size: var(--font-size-title);
+  font-weight: var(--font-weight-medium);
+  color: var(--colour-text-title);
+  margin: 0 0 0.4rem 0;
+}
+
+.sps-subtitle {
+  font-size: var(--font-size-paragraph);
+  color: black;
+  margin: 0;
+}
+
+.sps-select-all-row {
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 0.75rem;
+  margin-bottom: 1.25rem;
+}
+
+.sps-spaces {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+
+  flex-grow: 1;
+  flex-shrink: 1;
+  flex-basis: 0;
+  overflow-y: auto; 
+}
+
+.sps-space-group {
+  background-color: #f4f0ff;
+  border-radius: 0.75rem;
+  padding: 1rem 1.25rem;
+}
+
+.sps-space-header {
+  margin-bottom: 0.75rem;
+}
+
+.sps-space-header .sps-checkbox-label {
+  gap: 0.5rem;
+}
+
+.sps-space-name {
+  font-size: var(--font-size-lg);
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--colour-text-secondary);
+  margin: 0;
+}
+
+.sps-page-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.sps-page-item {
+  background: #ffffff;
+  border-radius: 0.5rem;
+  padding: 0.6rem 0.75rem;
+}
+
+.sps-checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  cursor: pointer;
+  font-size: var(--font-size-base);
+  color: #111;
+}
+
+.sps-checkbox-label input[type="checkbox"] {
+  width: 1rem;
+  height: 1rem;
+  accent-color: var(--colour-base-button);
+  cursor: pointer;
+}
+
+.sps-page-title {
+  font-weight: var(--font-weight-medium);
+}
+
+.sps-actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-top: auto; 
+  flex-shrink: 0; 
+}
+
+.sps-actions button:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.sps-page-item--restricted {
+  background-color: #f8f8f8;
+  border: 1px dashed #ccc;
+}
+
+.sps-checkbox-label--restricted {
+  color: #999;
+  cursor: not-allowed;
+}
+
+.sps-checkbox-label--restricted input[type="checkbox"] {
+  cursor: not-allowed;
+}
+
+.sps-restricted-badge {
+  margin-left: auto;
+  font-size: var(--font-size-base);
+  color: #cc2222;
+  font-weight: 600;
+  white-space: nowrap;
+}
