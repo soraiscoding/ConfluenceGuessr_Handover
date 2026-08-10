@@ -137,6 +137,7 @@ For the purposes of simply getting the app to run, just let forge deploy it on t
 
 Now that the app has been deployed and installed on your Confluence dev site, you can simply navigate to your site.
 There should be an **Apps** button on the left sidebar. If you click that and then click **ConfluenceGuessr** under your apps, the ConfluenceGuessr app should boot up and start itself automatically.
+The app looks best on a desktop monitor due to the bigger screen size. If you're on a laptop we recommend playing it in 75%-80% normal screen size; you can minimise the screen by pressing ctrl + minus (-) on windows and cmd + minus (-) on mac, and vice versa.
 
 # Folder structure
 
