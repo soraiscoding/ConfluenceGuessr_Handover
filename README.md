@@ -67,7 +67,7 @@ You will be prompted to paste the values for both. Repeat for each environment y
 
 Nb:
 `forge variables list` will list all the environment variables that have been set. You should see both API keys.  
-`forge variables unset {API_KEY} -e {environment_name}` will remove a specfic environment variable (API KEY in this case) from {environment_name}. Hopefully this won't have to be used in just getting the app to run.
+`forge variables unset {API_KEY} -e {environment_name}` will remove a specific environment variable (API KEY in this case) from {environment_name}. Hopefully this won't have to be used in just getting the app to run.
 
 ## 2. Deploying the app to your Confluence Dev site
 
