@@ -179,8 +179,8 @@ Instead, we rely on unit/component tests for logic correctness (above) and the m
 
 ### Setup
 
-1. Deploy and install the app on your developer site as described above, using the account you'll call **User A**.
-2. Invite a second account to the same site as **User B**, so multiplayer/leaderboard/permission behaviour can be checked from more than one identity:
+1. Deploy and install the app on your developer site as described above, using the account you'll call whatever you want, say **User A**.
+2. Invite a second account to the same site, let's say **User B**, so multiplayer/leaderboard/permission behaviour can be checked from more than one identity:
    - Go to your site's admin console at `https://<your-site>.atlassian.net/admin` → **Products** → **Confluence** → **Product access**, or from within Confluence go to the space's **Space settings** → **Permissions**.
    - Invite a second email address (a personal email or a second test account works) and grant it access to Confluence.
    - Accept the invite from that second account so it's an active user on the site.
