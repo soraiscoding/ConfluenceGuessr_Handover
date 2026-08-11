@@ -56,6 +56,9 @@ const STOPWORDS = new Set([
 const POSITIONAL_CAPITAL_BEFORE = /["'“”‘’(\[<.!?]\s*$/;
 const TOKEN_PATTERN = /[A-Za-z0-9](?:[A-Za-z0-9'’%-]*[A-Za-z0-9%])?/g;
 
+// Tokenizes a sentence into an array of objects, each containing a token, its index in the sentence, and a flag indicating whether a capital letter is positional (i.e., at the start of the sentence or after punctuation). Returns an empty array for non-string input.
+// Input: sentence (string)
+// Output: array of objects with properties: token (string), index (number), capitalIsPositional (boolean)
 export function indexTokenizer(sentence) {
   if (typeof sentence !== 'string') {
     return [];
@@ -68,6 +71,9 @@ export function indexTokenizer(sentence) {
   }));
 }
 
+// Classifies a token into one of the following categories: 'NUMBER', 'ACRONYM', 'PROPER', 'WORD', or null if it doesn't fit any category. The classification is based on the token's content and whether a capital letter is positional. Returns null for non-string or empty tokens.
+// Input: token (string), capitalIsPositional (boolean, optional)
+// Output: string or null
 export function classifyToken(token, capitalIsPositional = false) {
   if (typeof token !== 'string' || token.length === 0) {
     return null;
@@ -93,10 +99,16 @@ export function classifyToken(token, capitalIsPositional = false) {
   return null;
 }
 
+// Replaces a portion of a sentence with the redaction marker, effectively blanking out a token. The function takes the original sentence, the index of the token to be redacted, and the length of the token. It returns a new string with the specified token replaced by the redaction marker.
+// Input: sentence (string), index (number), length (number)
+// Output: string
 export function sentenceRedactor(sentence, index, length) {
   return sentence.slice(0, index) + REDACTION_MARKER + sentence.slice(index + length);
 }
 
+// Checks if a given hint contains the specified token, ignoring case. The function tokenizes the hint and compares each token to the target token. It returns true if the token is found in the hint, and false otherwise.
+// Input: hint (string), token (string)
+// Output: boolean
 export function hintRevealsToken(hint, token) {
   const target = String(token ?? '').toLowerCase();
 
@@ -104,6 +116,8 @@ export function hintRevealsToken(hint, token) {
 }
 
 // Picks the single token to blank out, or null when the sentence offers nothing meaningful.
+// Input: sentence (string), correctTitle (string), usedTokens (Set)
+// Output: object or null
 export function redactionTokenSelector(sentence, correctTitle, usedTokens = new Set()) {
   if (typeof sentence !== 'string' || sentence.includes(REDACTION_MARKER)) {
     return null;
@@ -158,6 +172,9 @@ export function redactionTokenSelector(sentence, correctTitle, usedTokens = new 
 
 const MIN_PROSE_WORDS = 3;
 
+// Checks if a sentence is considered prose by counting the number of words that start with a lowercase letter. A sentence is classified as prose if it contains at least a minimum number of such words, defined by MIN_PROSE_WORDS. The function returns true for prose sentences and false otherwise.
+// Input: sentence (string)
+// Output: boolean
 export function isProse(sentence) {
   return String(sentence ?? '')
     .split(/\s+/)
@@ -166,6 +183,8 @@ export function isProse(sentence) {
 }
 
 // This function basically builds the pool that the other distractors are drawn from.
+// Input: bodies (Map of pageId to pageBody), excludePageId (string, optional)
+// Output: Map of category to array of tokens
 export function tokenHarvester(bodies, excludePageId = null) {
   const byCategory = new Map(REDACTION_CATEGORIES.map((category) => [category, new Set()]));
 
@@ -199,6 +218,8 @@ export function tokenHarvester(bodies, excludePageId = null) {
 }
 
 // Distractors are drawn from the answer's own category first as mixed-category options make the answer obvious
+// Input: answer (string), category (string), tokenPool (Map of category to array of tokens), visibleExcerpt (string, optional), count (number, optional)
+// Output: array of strings
 export function redactionDistractorsPicker(
   answer,
   category,
@@ -247,6 +268,8 @@ export function redactionDistractorsPicker(
 // Returns question in the same shape as every other question type, with a
 // `redacted` flag, or null when this page cant produce one.
 // In case this returns null the slots are filled with an ordinary text question instead.
+// Input: pageId (string), titleMap (Map of pageId to {title}), pageBody (string), tokenPool (Map of category to array of tokens), usedTokens (Set, optional)
+// Output: object or null
 export function redactedQuestionBuilder(pageId, titleMap, pageBody, tokenPool, usedTokens = new Set()) {
   const correctTitle = titleMap.get(pageId)?.title ?? 'Unknown page';
   const sentences = splitSentences(pageBody).filter((s) => isUsableClue(s, correctTitle));

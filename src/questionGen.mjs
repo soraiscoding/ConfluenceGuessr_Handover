@@ -12,10 +12,14 @@ const HTML_TO_TEXT_OPTIONS = {
   ],
 };
 
+// Regexes for stripping out URLs and other junk from Confluence page text
 const BRACKETED_URL = /\[(?:https?:\/\/|\/|#|mailto:)[^\]]*\]/g;
 const BARE_URL = /https?:\/\/\S+|\bwww\.\S+/g;
 const MACHINE_NOISE = /Error rendering macro|\bcom\.atlassian\b|Exception:|HTTP\/\d|\bat [a-z]+\.[a-z]|(^|\s)#{2,}\s|:[a-z0-9_]+:|\*\*|(^|\s)-{3,}(\s|$)/i;
 
+// Strips out HTML, URLs, and other junk from Confluence page text to produce a clean, readable version for question generation.
+// Input: text (string)
+// Output: string
 export function stripPageText(text) {
   if (!text) {
     return '';
@@ -34,6 +38,9 @@ export function stripPageText(text) {
     .join('\n');
 }
 
+// Converts a JSON schema to a Gemini-compatible schema by removing the "additionalProperties" field from all objects in the schema.
+// Input: schema (object or array) - the JSON schema to convert
+// Output: object or array - the converted Gemini-compatible schema
 export function toGeminiSchema(schema) {
   if (Array.isArray(schema)) return schema.map(toGeminiSchema);
 
@@ -46,6 +53,9 @@ export function toGeminiSchema(schema) {
   return schema;
 }
 
+// Builds the JSON schema for the question generation output, which consists of an array of question objects. Each question object contains a "question" string, a "clue" string, and a "hint" string. All three properties are required, and no additional properties are allowed.
+// Input: none
+// Output: object - the JSON schema for the question generation output
 export function buildQuestionGenSchema() {
   return {
     type: 'object',
@@ -69,6 +79,9 @@ export function buildQuestionGenSchema() {
   };
 }
 
+// Shuffles an array in place
+// Input: arr (array) - the array to shuffle
+// Output: array - the shuffled array
 export function shuffle(arr) {
   for (let i = arr.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
@@ -78,6 +91,10 @@ export function shuffle(arr) {
   return arr;
 }
 
+// Builds a sequence of page IDs for question generation, ensuring that no page is repeated until all pages have been used. If there is only one page, it will be repeated as needed. The sequence is shuffled to randomize the order of pages.
+// Input: pageIds (array)
+//        numQuestions (number)
+// Output: array
 export function buildPageSequence(pageIds, numQuestions) {
   const pool = [...new Set(pageIds)];
 
@@ -102,6 +119,12 @@ export function buildPageSequence(pageIds, numQuestions) {
   return sequence;
 }
 
+// Picks a set of distractor titles for a given correct page ID from a pool of page IDs. The distractors are chosen to be different from the correct title and are shuffled to randomize their order. If there are not enough unique distractors, additional titles are pulled from the title map to fill the count.
+// Input: correctPageId (string)
+//        poolIds (array)
+//        titleMap (Map)
+//        count (number)
+// Output: array
 export function pickDistractors(correctPageId, poolIds, titleMap, count = 3) {
   const correctTitle = titleMap.get(correctPageId)?.title;
 
@@ -123,10 +146,14 @@ export function pickDistractors(correctPageId, poolIds, titleMap, count = 3) {
   return picked;
 }
 
+// Constants for question generation
 export const PAGE_EXCERPT_CHARS = 900;
 export const MAX_PAGES_PER_LLM_CALL = 5;
 export const MAX_UNIQUE_PAGES = 10;
 
+// Builds the prompt for the LLM to generate trivia questions from a set of page requests. Each page request specifies a page's content and the number of questions to generate from that page. The prompt includes instructions for how to format the questions, clues, and hints, as well as examples of acceptable and unacceptable styles. The prompt also includes the content of each page, truncated to a maximum number of characters.
+// Input: pageRequests (array)
+// Output: string
 export function buildPrompt(pageRequests) {
   const pagesBlock = pageRequests
     .map((p, i) => {
@@ -165,6 +192,10 @@ export function buildPrompt(pageRequests) {
     `Return only JSON matching the given schema.`;
 }
 
+// Splits an array into chunks of a specified size. The last chunk may be smaller if the array length is not a multiple of the chunk size.
+// Input: arr (array)
+//        size (number)
+// Output: array
 export function chunkArray(arr, size) {
   const chunks = [];
 
@@ -185,6 +216,7 @@ const MIN_CLUE_WORDS = 8;
 const MIN_HINT_LENGTH = 20;
 const MIN_HINT_WORDS = 4;
 
+// Question phrasings to rotate through for variety. The index is based on the number of clues already used, so that the same phrasing is not repeated too often.
 const QUESTION_PHRASINGS = [
   'Which page is this from?',
   'Where does this text appear?',
@@ -193,6 +225,9 @@ const QUESTION_PHRASINGS = [
   'Which Confluence page includes this snippet?',
 ];
 
+// Splits a block of text into sentences based on punctuation and line breaks. Each sentence is trimmed of whitespace and empty sentences are filtered out.
+// Input: text (string)
+// Output: array
 export function splitSentences(text) {
   if (!text) {
     return [];
@@ -204,6 +239,12 @@ export function splitSentences(text) {
     .filter(Boolean);
 }
 
+// Checks if a given sentence is usable as an excerpt for a trivia question. The sentence must meet certain length and word count requirements, must not contain the correct title, and must not contain machine-generated noise. Additionally, it must have a sufficient proportion of lowercase letters to be considered readable.
+// Input: sentence (string)
+//        correctTitle (string)
+//        minLength (number)
+//        minWords (number)
+// Output: boolean
 function isUsableExcerpt(sentence, correctTitle, minLength, minWords) {
   if (sentence.length < minLength || sentence.length > MAX_CLUE_LENGTH) {
     return false;
@@ -238,11 +279,20 @@ function isUsableExcerpt(sentence, correctTitle, minLength, minWords) {
   return lowercase / letters.length >= 0.5;
 }
 
+// Checks if a given sentence is usable as a clue for a trivia question. The sentence must be a string and must meet the requirements defined in isUsableExcerpt, with specific minimum length and word count for clues.
+// Input: sentence (string)
+//        correctTitle (string)
+// Output: boolean
 export function isUsableClue(sentence, correctTitle) {
   return typeof sentence === 'string'
     && isUsableExcerpt(sentence, correctTitle, MIN_CLUE_LENGTH, MIN_CLUE_WORDS);
 }
 
+// Selects a prompt excerpt from a page body for use in question generation. The excerpt is composed of usable sentences that do not contain the correct title and meet length and word count requirements. The total length of the excerpt is limited to a specified maximum number of characters.
+// Input: pageBody (string)
+//        correctTitle (string)
+//        maxChars (number)
+// Output: string
 export function selectPromptExcerpt(pageBody, correctTitle, maxChars = PAGE_EXCERPT_CHARS) {
   const usable = splitSentences(pageBody).filter((s) => isUsableClue(s, correctTitle));
 
@@ -260,14 +310,24 @@ export function selectPromptExcerpt(pageBody, correctTitle, maxChars = PAGE_EXCE
   return chosen.join('\n');
 }
 
-
+// A generic hint to use when no specific hint can be found. This is a fallback message that indicates the clue comes from one of the pages listed in the prompt, without revealing any additional information.
 export const GENERIC_HINT = 'This excerpt comes from one of the pages listed above.';
 
+// Checks if a given line is usable as a hint for a trivia question. The line must be a string and must meet the requirements defined in isUsableExcerpt, with specific minimum length and word count for hints.
+// Input: line (string)
+//        correctTitle (string)
+// Output: boolean
 export function isUsableHint(line, correctTitle) {
   return typeof line === 'string'
     && isUsableExcerpt(line, correctTitle, MIN_HINT_LENGTH, MIN_HINT_WORDS);
 }
 
+// Selects a hint line from a page body for use in question generation. The hint line is chosen from usable sentences that do not match the excluded line and are not in the set of excluded lines. If no suitable hint line is found, null is returned.
+// Input: pageBody (string)
+//        correctTitle (string)
+//        excludeLine (string)
+//        excludeLines (Set)
+// Output: string or null
 export function pickHintLine(pageBody, correctTitle, excludeLine, excludeLines = new Set()) {
   return splitSentences(pageBody).find(
     (line) => line !== excludeLine
@@ -276,6 +336,12 @@ export function pickHintLine(pageBody, correctTitle, excludeLine, excludeLines =
   ) ?? null;
 }
 
+// Extracts a verbatim question from a page body for use in trivia question generation. The function selects a clue from usable sentences that do not contain the correct title and have not been used before, unless reuse is allowed. A hint line is also selected, and a question phrasing is chosen based on the number of used clues. If no suitable clue can be found, null is returned.
+// Input: pageBody (string)
+//        correctTitle (string)
+//        usedClues (Set)
+//        allowReuse (boolean)
+// Output: object or null
 export function extractVerbatimQuestion(pageBody, correctTitle, usedClues = new Set(), allowReuse = false) {
   const sentences = splitSentences(pageBody);
 
@@ -303,6 +369,14 @@ export function extractVerbatimQuestion(pageBody, correctTitle, usedClues = new 
   return { question, clue, hint };
 }
 
+// Builds a fallback trivia question from a page body when the LLM fails to generate questions. The function extracts a verbatim question, selects distractor titles, and shuffles the options. If no suitable excerpt can be found, null is returned.
+// Input: pageId (string)
+//        poolIds (array)
+//        titleMap (Map)
+//        pageBody (string)
+//        usedClues (Set)
+//        allowReuse (boolean)
+// Output: object or null
 export function buildFallbackQuestion(pageId, poolIds, titleMap, pageBody, usedClues = new Set(), allowReuse = false) {
   const correctTitle = titleMap.get(pageId)?.title ?? 'Unknown page';
   const excerpt = extractVerbatimQuestion(pageBody, correctTitle, usedClues, allowReuse);
@@ -331,9 +405,15 @@ export const MAX_IMAGE_BYTES = 400 * 1024;
 export const MIN_IMAGE_BYTES = 10 * 1024;
 export const MAX_TOTAL_IMAGE_BYTES = 2 * 1024 * 1024;
 export const MAX_IMAGE_QUESTION_SHARE = 0.3;
+
+// Decorative images are often used for layout or branding and are not suitable for trivia questions. This regex matches common decorative image names, such as "header", "banner", "cover", "background", "footer", "divider", "placeholder", "logo", "icon", "avatar", and "thumbnail". Images with these names will be filtered out when selecting image attachments for question generation.
 const DECORATIVE_IMAGE_NAME =
   /(^|[-_ ])(header|banner|cover|background|footer|divider|placeholder|logo|icon|avatar|thumbnail)([-_ .]|$)/i;
 
+// Selects a set of image attachments from a list of candidates, filtering out images that are too small, too large, or have decorative names. The selected images are sorted by size and limited to a maximum count and total byte size. The function returns an array of selected image candidates.
+// Input: candidates (array)
+//        maxCount (number)
+// Output: array
 export function selectImageAttachments(candidates, maxCount) {
   const sized = candidates.filter((candidate) => {
     const size = Number(candidate?.attachment?.fileSize);
@@ -382,6 +462,8 @@ export function selectImageAttachments(candidates, maxCount) {
 }
 
 // LLM failure classification
+// Input: err (object)
+// Output: string
 export function classifyLlmError(err) {
   if (err?.code === 'NO_API_KEY') return 'skip';
 
@@ -396,6 +478,9 @@ export function classifyLlmError(err) {
   return 'retryable';
 }
 
+// Summarises an LLM error message for logging or display purposes.
+// Input: err (object)
+// Output: string
 export function summariseLlmError(err) {
   const message = String(err?.message ?? err).replace(/\s+/g, ' ').trim();
   return message.length > 400 ? `${message.slice(0, 400)}…` : message;

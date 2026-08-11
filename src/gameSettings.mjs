@@ -16,6 +16,8 @@ function normaliseToggle(value, fallback) {
 
 // Turns an untrusted settings payload into a full settings object that is safe to
 // store with a team game and hand back to every player who loads it
+// Input: raw (object)
+// Output: object
 export function normaliseGameSettings(raw) {
   const source = raw && typeof raw === 'object' ? raw : {};
 
